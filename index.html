@@ -28,6 +28,8 @@
   .lead { color: var(--muted); margin-bottom: 24px; }
   .card { background: var(--card); border: 1px solid var(--line);
           border-radius: 10px; padding: 18px; margin-bottom: 16px; }
+  .card.danger { border: 2px solid var(--bad); }
+  .card.danger h2 { color: var(--bad); }
   .muted { color: var(--muted); font-size: .92rem; }
   .mono { font-family: ui-monospace, Consolas, monospace; font-size: .85rem;
           word-break: break-all; }
@@ -55,6 +57,20 @@
   cluster. Pick your own flash dump; the tool checks it and gives you the
   patched file.</p>
 
+  <div class="card danger">
+    <h2>Warning: this can brick your cluster</h2>
+    <p>Writing a modified image to an instrument cluster can leave it
+    <strong>unable to start</strong>. A failed or interrupted write, a wrong
+    file or a patch that does not suit your cluster can all do that, and a
+    dead cluster can mean a car that will not run.</p>
+    <p>Only go ahead if you have a verified copy of your original dump and
+    know how to write it back to a cluster that no longer responds.</p>
+    <p style="margin:0"><strong>You do this entirely at your own risk.</strong>
+    The author takes no responsibility for any damage, cost or loss that
+    results from using this tool or these patches. They are provided as they
+    are, with no warranty of any kind.</p>
+  </div>
+
   <div class="card">
     <h2>1. Choose your flash dump</h2>
     <p class="muted">A full 256&nbsp;KB read of your own cluster. <strong>The file
@@ -68,7 +84,9 @@
     <h2>2. Patch</h2>
     <div id="verdict"></div>
     <form id="choices"></form>
-    <label id="ackrow" hidden><input type="checkbox" id="ack">
+    <label id="riskrow" hidden style="display:block"><input type="checkbox" id="risk">
+      I understand this can brick my cluster and that I do it at my own risk.</label>
+    <label id="ackrow" hidden style="display:block"><input type="checkbox" id="ack">
       I understand this build has not been confirmed on a car yet.</label>
     <p style="margin-top:14px"><button id="go" disabled>Make patched file</button></p>
   </div>
@@ -97,7 +115,9 @@
 // Optional usage counter. It only counts how many patched files were made;
 // it never receives the file, its checksum or anything about the car.
 // Leave "workspace" empty to switch the counter off.
-var COUNTER = { workspace: "", name: "patched-files" };
+// The counter is public and needs no key; never put an API key in this page.
+var COUNTER = { workspace: "heapsofprojects-team-6318", name: "first-counter-6318" };
+var shown = null;
 
 var patches = [], current = null, blobUrl = null;
 var $ = function (id) { return document.getElementById(id); };
@@ -118,15 +138,19 @@ async function loadPatches() {
 
 function counterUrl(up) {
   return "https://api.counterapi.dev/v2/" + encodeURIComponent(COUNTER.workspace) +
-         "/" + encodeURIComponent(COUNTER.name) + (up ? "/up" : "");
+         "/" + encodeURIComponent(COUNTER.name) + (up ? "/up" : "/stats");
 }
 async function counter(up) {
   if (!COUNTER.workspace) return;
   try {
     var j = await (await fetch(counterUrl(up))).json();
-    var d = j.data || j;
-    var n = d.up_count !== undefined ? d.up_count : (d.count !== undefined ? d.count : d.value);
-    if (typeof n === "number") { $("counter").textContent = n; $("counterrow").hidden = false; }
+    var n = j && j.data ? j.data.up_count : undefined;
+    if (typeof n !== "number") return;
+    // The service applies count-ups in batches, so the reply to our own
+    // count-up can still carry the old value; never show less than before + 1.
+    if (up && shown !== null) n = Math.max(n, shown + 1);
+    shown = n;
+    $("counter").textContent = n; $("counterrow").hidden = false;
   } catch (e) { /* the counter is optional; the tool works without it */ }
 }
 
@@ -134,6 +158,7 @@ function reset() {
   $("step2").hidden = true; $("step3").hidden = true;
   $("verdict").textContent = ""; $("choices").textContent = "";
   $("ackrow").hidden = true; $("ack").checked = false; $("go").disabled = true;
+  $("riskrow").hidden = true; $("risk").checked = false;
   if (blobUrl) { URL.revokeObjectURL(blobUrl); blobUrl = null; }
 }
 
@@ -145,8 +170,9 @@ function selectedPatch() {
 function refreshGo() {
   var p = selectedPatch();
   var untested = p && p.status.indexOf("confirmed") !== 0;
+  $("riskrow").hidden = !p;
   $("ackrow").hidden = !untested;
-  $("go").disabled = !p || (untested && !$("ack").checked);
+  $("go").disabled = !p || !$("risk").checked || (untested && !$("ack").checked);
 }
 
 async function onFile(file) {
@@ -217,6 +243,7 @@ async function onGo() {
 
 $("file").addEventListener("change", function (e) { onFile(e.target.files[0]); });
 $("ack").addEventListener("change", refreshGo);
+$("risk").addEventListener("change", refreshGo);
 $("go").addEventListener("click", function (e) { e.preventDefault(); onGo(); });
 loadPatches().then(function () { counter(false); }).catch(function () {
   $("fileinfo").textContent = "Could not load the patch list. Reload the page.";

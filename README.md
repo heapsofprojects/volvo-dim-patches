@@ -115,10 +115,24 @@ checks the result. It never modifies your dump.
 
 Keep your stock dump. Flashing it back restores the cluster.
 
-## Warnings
+## Warning: this can brick your cluster
 
-- A wrong image can leave a cluster unable to boot. Only flash if you can
-  recover it, and never flash a patch whose stock checksum does not match.
+Writing a modified image to an instrument cluster can leave it **unable to
+start**. A failed or interrupted write, a wrong file or a patch that does
+not suit your cluster can all do that, and a dead cluster can mean a car
+that will not run.
+
+Only go ahead if you have a verified copy of your original dump and know
+how to write it back to a cluster that no longer responds.
+
+**You do this entirely at your own risk. The author takes no responsibility
+for any damage, cost or loss that results from using this tool or these
+patches.** They are provided as they are, with no warranty of any kind (see
+sections 15 and 16 of the licence).
+
+## Other things to know
+
+- Never flash a patch whose stock checksum does not match your dump.
 - The patches do not hide the cluster's own warning messages. Do not change
   them so that they do.
 - Text sent over CAN is taken as-is by the patched cluster. Do not connect
