@@ -1,0 +1,142 @@
+; p3de_31327396_coolant_v4  (SW 31327396)
+; Linear-sweep disassembly of the bytes this patch writes.
+; Text and data tables inside a block decode as nonsense instructions.
+
+; ---- file 0x232C6  page $38 $B2C6  3 bytes  (replaces: b62855)
+  $B2C6: 06 78 7E             JMP    $787E
+
+; ---- file 0x380BF  fixed $40BF  2 bytes  (replaces: 59a1)
+  $40BF: 77                   ASR    (truncated)
+  $40C0: D5                   BITB   (truncated)
+
+; ---- file 0x3B7D5  fixed $77D5  304 bytes  (free flash)
+  $77D5: B6 01 44             LDAA   $0144
+  $77D8: 85 01                BITA   #$01
+  $77DA: 27 14                BEQ    $77F0
+  $77DC: B6 01 60             LDAA   $0160
+  $77DF: 81 E4                CMPA   #$E4
+  $77E1: 26 0D                BNE    $77F0
+  $77E3: B6 01 64             LDAA   $0164
+  $77E6: 81 80                CMPA   #$80
+  $77E8: 27 09                BEQ    $77F3
+  $77EA: 81 81                CMPA   #$81
+  $77EC: 27 2E                BEQ    $781C
+  $77EE: 20 00                BRA    $77F0
+  $77F0: 06 59 A1             JMP    $59A1
+  $77F3: B6 01 65             LDAA   $0165
+  $77F6: F6 01 66             LDAB   $0166
+  $77F9: B7 45                TFR    D,X
+  $77FB: B6 01 67             LDAA   $0167
+  $77FE: 6A 00                STAA   0,X
+  $7800: B6 01 68             LDAA   $0168
+  $7803: 6A 01                STAA   1,X
+  $7805: B6 01 69             LDAA   $0169
+  $7808: 6A 02                STAA   2,X
+  $780A: B6 01 6A             LDAA   $016A
+  $780D: 6A 03                STAA   3,X
+  $780F: B6 01 6B             LDAA   $016B
+  $7812: 6A 04                STAA   4,X
+  $7814: 18 0B 01 01 44       MOVB   #$01,$0144
+  $7819: 06 59 A1             JMP    $59A1
+  $781C: B6 01 65             LDAA   $0165
+  $781F: F6 01 66             LDAB   $0166
+  $7822: B7 45                TFR    D,X
+  $7824: B6 01 46             LDAA   $0146
+  $7827: 85 01                BITA   #$01
+  $7829: 27 4B                BEQ    $7876
+  $782B: B6 01 4A             LDAA   $014A
+  $782E: 36                   PSHA   
+  $782F: 18 0B 01 01 4A       MOVB   #$01,$014A
+  $7834: 18 0B E4 01 70       MOVB   #$E4,$0170
+  $7839: 18 0B 20 01 71       MOVB   #$20,$0171
+  $783E: 18 0B 08 01 7C       MOVB   #$08,$017C
+  $7843: B6 01 65             LDAA   $0165
+  $7846: 7A 01 74             STAA   $0174
+  $7849: B6 01 66             LDAA   $0166
+  $784C: 7A 01 75             STAA   $0175
+  $784F: A6 00                LDAA   0,X
+  $7851: 7A 01 76             STAA   $0176
+  $7854: A6 01                LDAA   1,X
+  $7856: 7A 01 77             STAA   $0177
+  $7859: A6 02                LDAA   2,X
+  $785B: 7A 01 78             STAA   $0178
+  $785E: A6 03                LDAA   3,X
+  $7860: 7A 01 79             STAA   $0179
+  $7863: A6 04                LDAA   4,X
+  $7865: 7A 01 7A             STAA   $017A
+  $7868: A6 05                LDAA   5,X
+  $786A: 7A 01 7B             STAA   $017B
+  $786D: 32                   PULA   
+  $786E: 7A 01 4A             STAA   $014A
+  $7871: 18 0B 01 01 46       MOVB   #$01,$0146
+  $7876: 18 0B 01 01 44       MOVB   #$01,$0144
+  $787B: 06 59 A1             JMP    $59A1
+  $787E: B6 28 55             LDAA   $2855
+  $7881: 81 13                CMPA   #$13
+  $7883: 26 72                BNE    $78F7
+  $7885: B6 28 56             LDAA   $2856
+  $7888: 81 0B                CMPA   #$0B
+  $788A: 26 6B                BNE    $78F7
+  $788C: 34                   PSHX   
+  $788D: 35                   PSHY   
+  $788E: CE 28 13             LDX    #$2813
+  $7891: C6 20                LDAB   #$20
+  $7893: 86 00                LDAA   #$00
+  $7895: 6A 30                STAA   1,X+
+  $7897: 86 20                LDAA   #$20
+  $7899: 6A 30                STAA   1,X+
+  $789B: 53                   DECB   
+  $789C: 26 F5                BNE    $7893
+  $789E: CE 28 14             LDX    #$2814
+  $78A1: CD 78 FD             LDY    #$78FD
+  $78A4: C6 08                LDAB   #$08
+  $78A6: A6 70                LDAA   1,Y+
+  $78A8: 6A 31                STAA   2,X+
+  $78AA: 53                   DECB   
+  $78AB: 26 F9                BNE    $78A6
+  $78AD: B6 11 6E             LDAA   $116E
+  $78B0: 27 39                BEQ    $78EB
+  $78B2: 80 3C                SUBA   #$3C
+  $78B4: 24 09                BCC    $78BF
+  $78B6: C6 2D                LDAB   #$2D
+  $78B8: 6B 31                STAB   2,X+
+  $78BA: 86 3C                LDAA   #$3C
+  $78BC: B0 11 6E             SUBA   $116E
+  $78BF: 81 64                CMPA   #$64
+  $78C1: 25 10                BCS    $78D3
+  $78C3: 80 64                SUBA   #$64
+  $78C5: C6 31                LDAB   #$31
+  $78C7: 6B 31                STAB   2,X+
+  $78C9: C7                   CLRB   
+  $78CA: 81 0A                CMPA   #$0A
+  $78CC: 25 13                BCS    $78E1
+  $78CE: 80 0A                SUBA   #$0A
+  $78D0: 52                   INCB   
+  $78D1: 20 F7                BRA    $78CA
+  $78D3: C7                   CLRB   
+  $78D4: 81 0A                CMPA   #$0A
+  $78D6: 25 05                BCS    $78DD
+  $78D8: 80 0A                SUBA   #$0A
+  $78DA: 52                   INCB   
+  $78DB: 20 F7                BRA    $78D4
+  $78DD: C1 00                CMPB   #$00
+  $78DF: 27 04                BEQ    $78E5
+  $78E1: CB 30                ADDB   #$30
+  $78E3: 6B 31                STAB   2,X+
+  $78E5: 8B 30                ADDA   #$30
+  $78E7: 6A 31                STAA   2,X+
+  $78E9: 20 06                BRA    $78F1
+  $78EB: 86 2D                LDAA   #$2D
+  $78ED: 6A 31                STAA   2,X+
+  $78EF: 6A 31                STAA   2,X+
+  $78F1: 86 43                LDAA   #$43
+  $78F3: 6A 00                STAA   0,X
+  $78F5: 31                   PULY   
+  $78F6: 30                   PULX   
+  $78F7: B6 28 55             LDAA   $2855
+  $78FA: 06 B2 C9             JMP    $B2C9
+  $78FD: 43                   DECA   
+  $78FE: 6F 6F                STS    1,-Y
+  $7900: 6C 61                STD    2,+Y
+  $7902: 6E 74                STX    5,Y+
+  $7904: 20                   BRA    (truncated)

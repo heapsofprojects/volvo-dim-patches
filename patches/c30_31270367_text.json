@@ -1,0 +1,48 @@
+{
+ "id": "c30_31270367_text",
+ "cluster": "C30/S40/V50 (P1) DIM, MC9S12DP256",
+ "sw_pn": "31270367",
+ "status": "confirmed on bench cluster",
+ "summary": "Trip-computer slot text replaced by text sent over CAN.",
+ "image_size": 262144,
+ "stock_sha256": "fb55c9c5d125a23d6afe5683660652ffade6305beffba1b549116ac503f3a788",
+ "patched_sha256": "7700a016021b4a3064a66d64daf042b7923ee81f3283f260da4ae6ec14ee20ca",
+ "notes": [],
+ "ops": [
+  {
+   "offset": "0x153DB",
+   "address": "page $35 $93DB",
+   "kind": "hook (replaces stock bytes)",
+   "expect": "87595959595959c3c829",
+   "write": "16d0afa7a7a7a7a7a7a7"
+  },
+  {
+   "offset": "0x380BF",
+   "address": "fixed $40BF",
+   "kind": "hook (replaces stock bytes)",
+   "expect": "6317",
+   "write": "d170"
+  },
+  {
+   "offset": "0x3D0AF",
+   "address": "fixed $D0AF",
+   "kind": "free flash",
+   "expect": "ff*171",
+   "write": "3734fc3a908ca55a2608fc3a928cc33c271bced200cd3a50c640a6306a700431f9cca55a7c3a90ccc33c7c3a92fc01648ccafe2618f60166c1402454ce3a501ae5fc01676c00fc01696c022043fc01648c8181263bfe01661f014601fb180b01014a180be40170180b200171790172790173ec007c0174ec027c0176ec047c0178180b06017c79017d180b01014620003033c1012706c10527022004cc3a503d87595959595959c3c8293d"
+  },
+  {
+   "offset": "0x3D170",
+   "address": "fixed $D170",
+   "kind": "free flash",
+   "expect": "ff*35",
+   "write": "3734fc01648ccafe2614f60166c43fce3a501ae5fc01676c00fc01696c023033066317"
+  },
+  {
+   "offset": "0x3D200",
+   "address": "fixed $D200",
+   "kind": "free flash",
+   "expect": "ff*64",
+   "write": "00430041004e00200054004500580054002000520045004100440059002000200020002000200020002000200020002000200020002000200020002000200020"
+  }
+ ]
+}

@@ -1,0 +1,150 @@
+; c30_31254781_text  (SW 31254781)
+; Linear-sweep disassembly of the bytes this patch writes.
+; Text and data tables inside a block decode as nonsense instructions.
+
+; ---- file 0x10D41  page $34 $8D41  10 bytes  (replaces: 87595959595959c3c829)
+  $8D41: 16 DC AE             JSR    $DCAE
+  $8D44: A7                   NOP    
+  $8D45: A7                   NOP    
+  $8D46: A7                   NOP    
+  $8D47: A7                   NOP    
+  $8D48: A7                   NOP    
+  $8D49: A7                   NOP    
+  $8D4A: A7                   NOP    
+
+; ---- file 0x380BF  fixed $40BF  2 bytes  (replaces: 5eac)
+  $40BF: DE 60                LDX    $60
+
+; ---- file 0x3DCAE  fixed $DCAE  171 bytes  (free flash)
+  $DCAE: 37                   PSHB   
+  $DCAF: 34                   PSHX   
+  $DCB0: FC 3A 90             LDD    $3A90
+  $DCB3: 8C A5 5A             CPD    #$A55A
+  $DCB6: 26 08                BNE    $DCC0
+  $DCB8: FC 3A 92             LDD    $3A92
+  $DCBB: 8C C3 3C             CPD    #$C33C
+  $DCBE: 27 1B                BEQ    $DCDB
+  $DCC0: CE DE A0             LDX    #$DEA0
+  $DCC3: CD 3A 50             LDY    #$3A50
+  $DCC6: C6 40                LDAB   #$40
+  $DCC8: A6 30                LDAA   1,X+
+  $DCCA: 6A 70                STAA   1,Y+
+  $DCCC: 04 31 F9             DBNE   B,$DCC8
+  $DCCF: CC A5 5A             LDD    #$A55A
+  $DCD2: 7C 3A 90             STD    $3A90
+  $DCD5: CC C3 3C             LDD    #$C33C
+  $DCD8: 7C 3A 92             STD    $3A92
+  $DCDB: FC 01 64             LDD    $0164
+  $DCDE: 8C CA FE             CPD    #$CAFE
+  $DCE1: 26 18                BNE    $DCFB
+  $DCE3: F6 01 66             LDAB   $0166
+  $DCE6: C1 40                CMPB   #$40
+  $DCE8: 24 54                BCC    $DD3E
+  $DCEA: CE 3A 50             LDX    #$3A50
+  $DCED: 1A E5                LEAX   B,X
+  $DCEF: FC 01 67             LDD    $0167
+  $DCF2: 6C 00                STD    0,X
+  $DCF4: FC 01 69             LDD    $0169
+  $DCF7: 6C 02                STD    2,X
+  $DCF9: 20 43                BRA    $DD3E
+  $DCFB: FC 01 64             LDD    $0164
+  $DCFE: 8C 81 81             CPD    #$8181
+  $DD01: 26 3B                BNE    $DD3E
+  $DD03: FE 01 66             LDX    $0166
+  $DD06: 1F 01 46 01 FB       BRCLR  $0146,#$01,$DD06
+  $DD0B: 18 0B 01 01 4A       MOVB   #$01,$014A
+  $DD10: 18 0B E4 01 70       MOVB   #$E4,$0170
+  $DD15: 18 0B 20 01 71       MOVB   #$20,$0171
+  $DD1A: 79 01 72             CLR    $0172
+  $DD1D: 79 01 73             CLR    $0173
+  $DD20: EC 00                LDD    0,X
+  $DD22: 7C 01 74             STD    $0174
+  $DD25: EC 02                LDD    2,X
+  $DD27: 7C 01 76             STD    $0176
+  $DD2A: EC 04                LDD    4,X
+  $DD2C: 7C 01 78             STD    $0178
+  $DD2F: 18 0B 06 01 7C       MOVB   #$06,$017C
+  $DD34: 79 01 7D             CLR    $017D
+  $DD37: 18 0B 01 01 46       MOVB   #$01,$0146
+  $DD3C: 20 00                BRA    $DD3E
+  $DD3E: 30                   PULX   
+  $DD3F: 33                   PULB   
+  $DD40: C1 01                CMPB   #$01
+  $DD42: 27 06                BEQ    $DD4A
+  $DD44: C1 05                CMPB   #$05
+  $DD46: 27 02                BEQ    $DD4A
+  $DD48: 20 04                BRA    $DD4E
+  $DD4A: CC 3A 50             LDD    #$3A50
+  $DD4D: 3D                   RTS    
+  $DD4E: 87                   CLRA   
+  $DD4F: 59                   LSLD   
+  $DD50: 59                   LSLD   
+  $DD51: 59                   LSLD   
+  $DD52: 59                   LSLD   
+  $DD53: 59                   LSLD   
+  $DD54: 59                   LSLD   
+  $DD55: C3 C8 29             ADDD   #$C829
+  $DD58: 3D                   RTS    
+
+; ---- file 0x3DE60  fixed $DE60  35 bytes  (free flash)
+  $DE60: 37                   PSHB   
+  $DE61: 34                   PSHX   
+  $DE62: FC 01 64             LDD    $0164
+  $DE65: 8C CA FE             CPD    #$CAFE
+  $DE68: 26 14                BNE    $DE7E
+  $DE6A: F6 01 66             LDAB   $0166
+  $DE6D: C4 3F                ANDB   #$3F
+  $DE6F: CE 3A 50             LDX    #$3A50
+  $DE72: 1A E5                LEAX   B,X
+  $DE74: FC 01 67             LDD    $0167
+  $DE77: 6C 00                STD    0,X
+  $DE79: FC 01 69             LDD    $0169
+  $DE7C: 6C 02                STD    2,X
+  $DE7E: 30                   PULX   
+  $DE7F: 33                   PULB   
+  $DE80: 06 5E AC             JMP    $5EAC
+
+; ---- file 0x3DEA0  fixed $DEA0  64 bytes  (free flash)
+  $DEA0: 00                   BGND   
+  $DEA1: 43                   DECA   
+  $DEA2: 00                   BGND   
+  $DEA3: 41                   COMA   
+  $DEA4: 00                   BGND   
+  $DEA5: 4E 00 20 00          BRSET  0,X,#$20,$DEA9
+  $DEA9: 54                   LSRB   
+  $DEAA: 00                   BGND   
+  $DEAB: 45                   ROLA   
+  $DEAC: 00                   BGND   
+  $DEAD: 58                   ASLB   
+  $DEAE: 00                   BGND   
+  $DEAF: 54                   LSRB   
+  $DEB0: 00                   BGND   
+  $DEB1: 20 00                BRA    $DEB3
+  $DEB3: 52                   INCB   
+  $DEB4: 00                   BGND   
+  $DEB5: 45                   ROLA   
+  $DEB6: 00                   BGND   
+  $DEB7: 41                   COMA   
+  $DEB8: 00                   BGND   
+  $DEB9: 44                   LSRA   
+  $DEBA: 00                   BGND   
+  $DEBB: 59                   LSLD   
+  $DEBC: 00                   BGND   
+  $DEBD: 20 00                BRA    $DEBF
+  $DEBF: 20 00                BRA    $DEC1
+  $DEC1: 20 00                BRA    $DEC3
+  $DEC3: 20 00                BRA    $DEC5
+  $DEC5: 20 00                BRA    $DEC7
+  $DEC7: 20 00                BRA    $DEC9
+  $DEC9: 20 00                BRA    $DECB
+  $DECB: 20 00                BRA    $DECD
+  $DECD: 20 00                BRA    $DECF
+  $DECF: 20 00                BRA    $DED1
+  $DED1: 20 00                BRA    $DED3
+  $DED3: 20 00                BRA    $DED5
+  $DED5: 20 00                BRA    $DED7
+  $DED7: 20 00                BRA    $DED9
+  $DED9: 20 00                BRA    $DEDB
+  $DEDB: 20 00                BRA    $DEDD
+  $DEDD: 20 00                BRA    $DEDF
+  $DEDF: 20                   BRA    (truncated)

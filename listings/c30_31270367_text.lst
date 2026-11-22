@@ -1,0 +1,150 @@
+; c30_31270367_text  (SW 31270367)
+; Linear-sweep disassembly of the bytes this patch writes.
+; Text and data tables inside a block decode as nonsense instructions.
+
+; ---- file 0x153DB  page $35 $93DB  10 bytes  (replaces: 87595959595959c3c829)
+  $93DB: 16 D0 AF             JSR    $D0AF
+  $93DE: A7                   NOP    
+  $93DF: A7                   NOP    
+  $93E0: A7                   NOP    
+  $93E1: A7                   NOP    
+  $93E2: A7                   NOP    
+  $93E3: A7                   NOP    
+  $93E4: A7                   NOP    
+
+; ---- file 0x380BF  fixed $40BF  2 bytes  (replaces: 6317)
+  $40BF: D1 70                CMPB   $70
+
+; ---- file 0x3D0AF  fixed $D0AF  171 bytes  (free flash)
+  $D0AF: 37                   PSHB   
+  $D0B0: 34                   PSHX   
+  $D0B1: FC 3A 90             LDD    $3A90
+  $D0B4: 8C A5 5A             CPD    #$A55A
+  $D0B7: 26 08                BNE    $D0C1
+  $D0B9: FC 3A 92             LDD    $3A92
+  $D0BC: 8C C3 3C             CPD    #$C33C
+  $D0BF: 27 1B                BEQ    $D0DC
+  $D0C1: CE D2 00             LDX    #$D200
+  $D0C4: CD 3A 50             LDY    #$3A50
+  $D0C7: C6 40                LDAB   #$40
+  $D0C9: A6 30                LDAA   1,X+
+  $D0CB: 6A 70                STAA   1,Y+
+  $D0CD: 04 31 F9             DBNE   B,$D0C9
+  $D0D0: CC A5 5A             LDD    #$A55A
+  $D0D3: 7C 3A 90             STD    $3A90
+  $D0D6: CC C3 3C             LDD    #$C33C
+  $D0D9: 7C 3A 92             STD    $3A92
+  $D0DC: FC 01 64             LDD    $0164
+  $D0DF: 8C CA FE             CPD    #$CAFE
+  $D0E2: 26 18                BNE    $D0FC
+  $D0E4: F6 01 66             LDAB   $0166
+  $D0E7: C1 40                CMPB   #$40
+  $D0E9: 24 54                BCC    $D13F
+  $D0EB: CE 3A 50             LDX    #$3A50
+  $D0EE: 1A E5                LEAX   B,X
+  $D0F0: FC 01 67             LDD    $0167
+  $D0F3: 6C 00                STD    0,X
+  $D0F5: FC 01 69             LDD    $0169
+  $D0F8: 6C 02                STD    2,X
+  $D0FA: 20 43                BRA    $D13F
+  $D0FC: FC 01 64             LDD    $0164
+  $D0FF: 8C 81 81             CPD    #$8181
+  $D102: 26 3B                BNE    $D13F
+  $D104: FE 01 66             LDX    $0166
+  $D107: 1F 01 46 01 FB       BRCLR  $0146,#$01,$D107
+  $D10C: 18 0B 01 01 4A       MOVB   #$01,$014A
+  $D111: 18 0B E4 01 70       MOVB   #$E4,$0170
+  $D116: 18 0B 20 01 71       MOVB   #$20,$0171
+  $D11B: 79 01 72             CLR    $0172
+  $D11E: 79 01 73             CLR    $0173
+  $D121: EC 00                LDD    0,X
+  $D123: 7C 01 74             STD    $0174
+  $D126: EC 02                LDD    2,X
+  $D128: 7C 01 76             STD    $0176
+  $D12B: EC 04                LDD    4,X
+  $D12D: 7C 01 78             STD    $0178
+  $D130: 18 0B 06 01 7C       MOVB   #$06,$017C
+  $D135: 79 01 7D             CLR    $017D
+  $D138: 18 0B 01 01 46       MOVB   #$01,$0146
+  $D13D: 20 00                BRA    $D13F
+  $D13F: 30                   PULX   
+  $D140: 33                   PULB   
+  $D141: C1 01                CMPB   #$01
+  $D143: 27 06                BEQ    $D14B
+  $D145: C1 05                CMPB   #$05
+  $D147: 27 02                BEQ    $D14B
+  $D149: 20 04                BRA    $D14F
+  $D14B: CC 3A 50             LDD    #$3A50
+  $D14E: 3D                   RTS    
+  $D14F: 87                   CLRA   
+  $D150: 59                   LSLD   
+  $D151: 59                   LSLD   
+  $D152: 59                   LSLD   
+  $D153: 59                   LSLD   
+  $D154: 59                   LSLD   
+  $D155: 59                   LSLD   
+  $D156: C3 C8 29             ADDD   #$C829
+  $D159: 3D                   RTS    
+
+; ---- file 0x3D170  fixed $D170  35 bytes  (free flash)
+  $D170: 37                   PSHB   
+  $D171: 34                   PSHX   
+  $D172: FC 01 64             LDD    $0164
+  $D175: 8C CA FE             CPD    #$CAFE
+  $D178: 26 14                BNE    $D18E
+  $D17A: F6 01 66             LDAB   $0166
+  $D17D: C4 3F                ANDB   #$3F
+  $D17F: CE 3A 50             LDX    #$3A50
+  $D182: 1A E5                LEAX   B,X
+  $D184: FC 01 67             LDD    $0167
+  $D187: 6C 00                STD    0,X
+  $D189: FC 01 69             LDD    $0169
+  $D18C: 6C 02                STD    2,X
+  $D18E: 30                   PULX   
+  $D18F: 33                   PULB   
+  $D190: 06 63 17             JMP    $6317
+
+; ---- file 0x3D200  fixed $D200  64 bytes  (free flash)
+  $D200: 00                   BGND   
+  $D201: 43                   DECA   
+  $D202: 00                   BGND   
+  $D203: 41                   COMA   
+  $D204: 00                   BGND   
+  $D205: 4E 00 20 00          BRSET  0,X,#$20,$D209
+  $D209: 54                   LSRB   
+  $D20A: 00                   BGND   
+  $D20B: 45                   ROLA   
+  $D20C: 00                   BGND   
+  $D20D: 58                   ASLB   
+  $D20E: 00                   BGND   
+  $D20F: 54                   LSRB   
+  $D210: 00                   BGND   
+  $D211: 20 00                BRA    $D213
+  $D213: 52                   INCB   
+  $D214: 00                   BGND   
+  $D215: 45                   ROLA   
+  $D216: 00                   BGND   
+  $D217: 41                   COMA   
+  $D218: 00                   BGND   
+  $D219: 44                   LSRA   
+  $D21A: 00                   BGND   
+  $D21B: 59                   LSLD   
+  $D21C: 00                   BGND   
+  $D21D: 20 00                BRA    $D21F
+  $D21F: 20 00                BRA    $D221
+  $D221: 20 00                BRA    $D223
+  $D223: 20 00                BRA    $D225
+  $D225: 20 00                BRA    $D227
+  $D227: 20 00                BRA    $D229
+  $D229: 20 00                BRA    $D22B
+  $D22B: 20 00                BRA    $D22D
+  $D22D: 20 00                BRA    $D22F
+  $D22F: 20 00                BRA    $D231
+  $D231: 20 00                BRA    $D233
+  $D233: 20 00                BRA    $D235
+  $D235: 20 00                BRA    $D237
+  $D237: 20 00                BRA    $D239
+  $D239: 20 00                BRA    $D23B
+  $D23B: 20 00                BRA    $D23D
+  $D23D: 20 00                BRA    $D23F
+  $D23F: 20                   BRA    (truncated)

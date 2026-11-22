@@ -1,0 +1,66 @@
+{
+ "id": "xc70_31254762_coolant",
+ "cluster": "XC70/V70/S80 (P3) DIM 2008, MC9S12H256",
+ "sw_pn": "31254762",
+ "status": "confirmed on car",
+ "summary": "As the text patch, plus engine coolant temperature shown automatically from CAN 0x490.",
+ "image_size": 262144,
+ "stock_sha256": "f63a9bb0c03a1a3ff0a332febb4fa9ed6039c7fe0d3bdd5cb4f330269ef3272c",
+ "patched_sha256": "a18290f5247e854e83d345d2e0510aed4c66f0e91ab79f9f2a432ea06fad2fc5",
+ "notes": [
+  "The image confirmed on the car also contained 648 bytes at file 0x3B401-0x3B688 (data copied from a different firmware version plus an unused helper). Nothing in this patch or in the stock firmware refers to them, so they are left out here; as_flashed_sha256 is the checksum of the image as it was actually flashed.",
+  "Known flaw: the coolant helper copies its 64-byte template with pre-increment addressing (MOVB 1,+X,1,+Y at $7831), so it writes $3CFE-$3D3D instead of $3CFD-$3D3C: one stray $FF lands on RAM $3D3D on every 0x490 frame. No visible effect has been reported, but it should be fixed in a later build."
+ ],
+ "ops": [
+  {
+   "offset": "0x24979",
+   "address": "page $39 $8979",
+   "kind": "hook (replaces stock bytes)",
+   "expect": "87595959595959c39703",
+   "write": "1676a0a7a7a7a7a7a7a7"
+  },
+  {
+   "offset": "0x24EAE",
+   "address": "page $39 $8EAE",
+   "kind": "hook (replaces stock bytes)",
+   "expect": "87595959595959c39703",
+   "write": "1676a0a7a7a7a7a7a7a7"
+  },
+  {
+   "offset": "0x380BF",
+   "address": "fixed $40BF",
+   "kind": "hook (replaces stock bytes)",
+   "expect": "579d",
+   "write": "77d5"
+  },
+  {
+   "offset": "0x3B6A0",
+   "address": "fixed $76A0",
+   "kind": "free flash",
+   "expect": "ff*46",
+   "write": "c101261fb63cfc81552714ce7700cd3cfdc640180a30705326f986557a3cfccc3cfd3d87595959595959c397033d"
+  },
+  {
+   "offset": "0x3B700",
+   "address": "fixed $7700",
+   "kind": "free flash",
+   "expect": "ff*64",
+   "write": "002d002d002e002d0020006c002f003100300030006b006d00200020002000200069006e007300740061006e00740061006e0065006f00750073002000200020"
+  },
+  {
+   "offset": "0x3B7D5",
+   "address": "fixed $77D5",
+   "kind": "free flash",
+   "expect": "ff*62",
+   "write": "b6014485012734b6016081e4263db6016481802626b60165f60166b745b601676a00b601686a01b601696a02b6016a6a03b6016b6a04180b01014406579d"
+  },
+  {
+   "offset": "0x3B820",
+   "address": "fixed $7820",
+   "kind": "free flash",
+   "expect": "ff*145",
+   "write": "819227030678103435ce7871cd3cfdc640180a20605326f9b60166803c180e87c1642505c0644220f781002604862020028b307a3d0e87c10a2505c00a4220f78b307a3d10180f8b307a3d1231300678100043006f006f006c0061006e00740020003000300030004300200020002000200020002000200020002000200020002000200020002000200020002000200020"
+  }
+ ],
+ "as_flashed_sha256": "293ae29f6f32754f093c1d0f3180082c2a3c5f26860c0925d311a5baebf86a99"
+}

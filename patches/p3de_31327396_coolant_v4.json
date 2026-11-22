@@ -1,0 +1,34 @@
+{
+ "id": "p3de_31327396_coolant_v4",
+ "cluster": "P3 DIM, German-market 256K variant, MC9S12H256",
+ "sw_pn": "31327396",
+ "status": "emulator-tested only, NOT yet tried on a car",
+ "summary": "Instant-consumption slot shows 'Coolant 35C'; fixes the byte shift of the first build.",
+ "image_size": 262144,
+ "stock_sha256": "80075d803bbb990bfa4a66ff19cecf710c96d0efe80c1afe6ca92d715473ebe8",
+ "patched_sha256": "4a1cd535ddadeef8fed5c02ba3499ed709b5acbf22a8e2d143003de8532b8bf1",
+ "notes": [],
+ "ops": [
+  {
+   "offset": "0x232C6",
+   "address": "page $38 $B2C6",
+   "kind": "hook (replaces stock bytes)",
+   "expect": "b62855",
+   "write": "06787e"
+  },
+  {
+   "offset": "0x380BF",
+   "address": "fixed $40BF",
+   "kind": "hook (replaces stock bytes)",
+   "expect": "59a1",
+   "write": "77d5"
+  },
+  {
+   "offset": "0x3B7D5",
+   "address": "fixed $77D5",
+   "kind": "free flash",
+   "expect": "ff*304",
+   "write": "b6014485012714b6016081e4260db60164818027098181272e20000659a1b60165f60166b745b601676a00b601686a01b601696a02b6016a6a03b6016b6a04180b0101440659a1b60165f60166b745b601468501274bb6014a36180b01014a180be40170180b200171180b08017cb601657a0174b601667a0175a6007a0176a6017a0177a6027a0178a6037a0179a6047a017aa6057a017b327a014a180b010146180b0101440659a1b6285581132672b62856810b266b3435ce2813c62086006a3086206a305326f5ce2814cd78fdc608a6706a315326f9b6116e2739803c2409c62d6b31863cb0116e816425108064c6316b31c7810a2513800a5220f7c7810a2505800a5220f7c1002704cb306b318b306a312006862d6a316a3186436a003130b6285506b2c9436f6f6c616e7420"
+  }
+ ]
+}

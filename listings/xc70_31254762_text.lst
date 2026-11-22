@@ -1,0 +1,117 @@
+; xc70_31254762_text  (SW 31254762)
+; Linear-sweep disassembly of the bytes this patch writes.
+; Text and data tables inside a block decode as nonsense instructions.
+
+; ---- file 0x24979  page $39 $8979  10 bytes  (replaces: 87595959595959c39703)
+  $8979: 16 76 A0             JSR    $76A0
+  $897C: A7                   NOP    
+  $897D: A7                   NOP    
+  $897E: A7                   NOP    
+  $897F: A7                   NOP    
+  $8980: A7                   NOP    
+  $8981: A7                   NOP    
+  $8982: A7                   NOP    
+
+; ---- file 0x24EAE  page $39 $8EAE  10 bytes  (replaces: 87595959595959c39703)
+  $8EAE: 16 76 A0             JSR    $76A0
+  $8EB1: A7                   NOP    
+  $8EB2: A7                   NOP    
+  $8EB3: A7                   NOP    
+  $8EB4: A7                   NOP    
+  $8EB5: A7                   NOP    
+  $8EB6: A7                   NOP    
+  $8EB7: A7                   NOP    
+
+; ---- file 0x380BF  fixed $40BF  2 bytes  (replaces: 579d)
+  $40BF: 77                   ASR    (truncated)
+  $40C0: D5                   BITB   (truncated)
+
+; ---- file 0x3B6A0  fixed $76A0  46 bytes  (free flash)
+  $76A0: C1 01                CMPB   #$01
+  $76A2: 26 1F                BNE    $76C3
+  $76A4: B6 3C FC             LDAA   $3CFC
+  $76A7: 81 55                CMPA   #$55
+  $76A9: 27 14                BEQ    $76BF
+  $76AB: CE 77 00             LDX    #$7700
+  $76AE: CD 3C FD             LDY    #$3CFD
+  $76B1: C6 40                LDAB   #$40
+  $76B3: 18 0A 30 70          MOVB   1,X+,1,Y+
+  $76B7: 53                   DECB   
+  $76B8: 26 F9                BNE    $76B3
+  $76BA: 86 55                LDAA   #$55
+  $76BC: 7A 3C FC             STAA   $3CFC
+  $76BF: CC 3C FD             LDD    #$3CFD
+  $76C2: 3D                   RTS    
+  $76C3: 87                   CLRA   
+  $76C4: 59                   LSLD   
+  $76C5: 59                   LSLD   
+  $76C6: 59                   LSLD   
+  $76C7: 59                   LSLD   
+  $76C8: 59                   LSLD   
+  $76C9: 59                   LSLD   
+  $76CA: C3 97 03             ADDD   #$9703
+  $76CD: 3D                   RTS    
+
+; ---- file 0x3B700  fixed $7700  64 bytes  (free flash)
+  $7700: 00                   BGND   
+  $7701: 2D 00                BLT    $7703
+  $7703: 2D 00                BLT    $7705
+  $7705: 2E 00                BGT    $7707
+  $7707: 2D 00                BLT    $7709
+  $7709: 20 00                BRA    $770B
+  $770B: 6C 00                STD    0,X
+  $770D: 2F 00                BLE    $770F
+  $770F: 31                   PULY   
+  $7710: 00                   BGND   
+  $7711: 30                   PULX   
+  $7712: 00                   BGND   
+  $7713: 30                   PULX   
+  $7714: 00                   BGND   
+  $7715: 6B 00                STAB   0,X
+  $7717: 6D 00                STY    0,X
+  $7719: 20 00                BRA    $771B
+  $771B: 20 00                BRA    $771D
+  $771D: 20 00                BRA    $771F
+  $771F: 20 00                BRA    $7721
+  $7721: 69 00                CLR    0,X
+  $7723: 6E 00                STX    0,X
+  $7725: 73 00 74             DEC    $0074
+  $7728: 00                   BGND   
+  $7729: 61 00                COM    0,X
+  $772B: 6E 00                STX    0,X
+  $772D: 74 00 61             LSR    $0061
+  $7730: 00                   BGND   
+  $7731: 6E 00                STX    0,X
+  $7733: 65 00                ROL    0,X
+  $7735: 6F 00                STS    0,X
+  $7737: 75 00 73             ROL    $0073
+  $773A: 00                   BGND   
+  $773B: 20 00                BRA    $773D
+  $773D: 20 00                BRA    $773F
+  $773F: 20                   BRA    (truncated)
+
+; ---- file 0x3B7D5  fixed $77D5  62 bytes  (free flash)
+  $77D5: B6 01 44             LDAA   $0144
+  $77D8: 85 01                BITA   #$01
+  $77DA: 27 34                BEQ    $7810
+  $77DC: B6 01 60             LDAA   $0160
+  $77DF: 81 E4                CMPA   #$E4
+  $77E1: 26 2D                BNE    $7810
+  $77E3: B6 01 64             LDAA   $0164
+  $77E6: 81 80                CMPA   #$80
+  $77E8: 26 26                BNE    $7810
+  $77EA: B6 01 65             LDAA   $0165
+  $77ED: F6 01 66             LDAB   $0166
+  $77F0: B7 45                TFR    D,X
+  $77F2: B6 01 67             LDAA   $0167
+  $77F5: 6A 00                STAA   0,X
+  $77F7: B6 01 68             LDAA   $0168
+  $77FA: 6A 01                STAA   1,X
+  $77FC: B6 01 69             LDAA   $0169
+  $77FF: 6A 02                STAA   2,X
+  $7801: B6 01 6A             LDAA   $016A
+  $7804: 6A 03                STAA   3,X
+  $7806: B6 01 6B             LDAA   $016B
+  $7809: 6A 04                STAA   4,X
+  $780B: 18 0B 01 01 44       MOVB   #$01,$0144
+  $7810: 06 57 9D             JMP    $579D

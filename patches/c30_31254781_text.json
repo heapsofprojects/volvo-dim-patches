@@ -1,0 +1,48 @@
+{
+ "id": "c30_31254781_text",
+ "cluster": "C30/S40/V50 (P1) DIM, MC9S12DP256",
+ "sw_pn": "31254781",
+ "status": "confirmed on car",
+ "summary": "Trip-computer slot text replaced by text sent over CAN (port of the 31270367 patch).",
+ "image_size": 262144,
+ "stock_sha256": "47d563d0a5a64112d8ffdd37642bee89f121b777953f806ce4c40f6aa523e88a",
+ "patched_sha256": "5f400b4bd0d6672ede91e35d256853f5cd72f1a4a92c916eada3a4323caca421",
+ "notes": [],
+ "ops": [
+  {
+   "offset": "0x10D41",
+   "address": "page $34 $8D41",
+   "kind": "hook (replaces stock bytes)",
+   "expect": "87595959595959c3c829",
+   "write": "16dcaea7a7a7a7a7a7a7"
+  },
+  {
+   "offset": "0x380BF",
+   "address": "fixed $40BF",
+   "kind": "hook (replaces stock bytes)",
+   "expect": "5eac",
+   "write": "de60"
+  },
+  {
+   "offset": "0x3DCAE",
+   "address": "fixed $DCAE",
+   "kind": "free flash",
+   "expect": "ff*171",
+   "write": "3734fc3a908ca55a2608fc3a928cc33c271bcedea0cd3a50c640a6306a700431f9cca55a7c3a90ccc33c7c3a92fc01648ccafe2618f60166c1402454ce3a501ae5fc01676c00fc01696c022043fc01648c8181263bfe01661f014601fb180b01014a180be40170180b200171790172790173ec007c0174ec027c0176ec047c0178180b06017c79017d180b01014620003033c1012706c10527022004cc3a503d87595959595959c3c8293d"
+  },
+  {
+   "offset": "0x3DE60",
+   "address": "fixed $DE60",
+   "kind": "free flash",
+   "expect": "ff*35",
+   "write": "3734fc01648ccafe2614f60166c43fce3a501ae5fc01676c00fc01696c023033065eac"
+  },
+  {
+   "offset": "0x3DEA0",
+   "address": "fixed $DEA0",
+   "kind": "free flash",
+   "expect": "ff*64",
+   "write": "00430041004e00200054004500580054002000520045004100440059002000200020002000200020002000200020002000200020002000200020002000200020"
+  }
+ ]
+}

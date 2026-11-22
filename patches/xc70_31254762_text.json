@@ -1,0 +1,58 @@
+{
+ "id": "xc70_31254762_text",
+ "cluster": "XC70/V70/S80 (P3) DIM 2008, MC9S12H256",
+ "sw_pn": "31254762",
+ "status": "confirmed on car",
+ "summary": "Slot 1 text writable over CAN (0x720 cmd $80).",
+ "image_size": 262144,
+ "stock_sha256": "f63a9bb0c03a1a3ff0a332febb4fa9ed6039c7fe0d3bdd5cb4f330269ef3272c",
+ "patched_sha256": "b49166dd7548f230c1a86a9daf0f94d5176ba125dd9abc9b69297396b7bed0b7",
+ "notes": [
+  "The image confirmed on the car also contained 648 bytes at file 0x3B401-0x3B688 (data copied from a different firmware version plus an unused helper). Nothing in this patch or in the stock firmware refers to them, so they are left out here; as_flashed_sha256 is the checksum of the image as it was actually flashed."
+ ],
+ "ops": [
+  {
+   "offset": "0x24979",
+   "address": "page $39 $8979",
+   "kind": "hook (replaces stock bytes)",
+   "expect": "87595959595959c39703",
+   "write": "1676a0a7a7a7a7a7a7a7"
+  },
+  {
+   "offset": "0x24EAE",
+   "address": "page $39 $8EAE",
+   "kind": "hook (replaces stock bytes)",
+   "expect": "87595959595959c39703",
+   "write": "1676a0a7a7a7a7a7a7a7"
+  },
+  {
+   "offset": "0x380BF",
+   "address": "fixed $40BF",
+   "kind": "hook (replaces stock bytes)",
+   "expect": "579d",
+   "write": "77d5"
+  },
+  {
+   "offset": "0x3B6A0",
+   "address": "fixed $76A0",
+   "kind": "free flash",
+   "expect": "ff*46",
+   "write": "c101261fb63cfc81552714ce7700cd3cfdc640180a30705326f986557a3cfccc3cfd3d87595959595959c397033d"
+  },
+  {
+   "offset": "0x3B700",
+   "address": "fixed $7700",
+   "kind": "free flash",
+   "expect": "ff*64",
+   "write": "002d002d002e002d0020006c002f003100300030006b006d00200020002000200069006e007300740061006e00740061006e0065006f00750073002000200020"
+  },
+  {
+   "offset": "0x3B7D5",
+   "address": "fixed $77D5",
+   "kind": "free flash",
+   "expect": "ff*62",
+   "write": "b6014485012734b6016081e4262db6016481802626b60165f60166b745b601676a00b601686a01b601696a02b6016a6a03b6016b6a04180b01014406579d"
+  }
+ ],
+ "as_flashed_sha256": "fb9e837988d559f84246eb2fd5edd5807b979ccc6d1bb631dfffa84a2d54d4ff"
+}

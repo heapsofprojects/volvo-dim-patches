@@ -1,0 +1,7 @@
+# Never commit firmware images or dumps.
+*.bin
+*.hex
+*.s19
+*.eep
+*.trc
+__pycache__/
