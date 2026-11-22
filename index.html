@@ -1,0 +1,227 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Volvo DIM patch tool</title>
+<style>
+  :root {
+    --bg: #f6f5f1; --card: #ffffff; --ink: #1c1d1f; --muted: #5d6066;
+    --line: #dcdad3; --accent: #0b5c8a; --accent-ink: #ffffff;
+    --ok: #1f6b3a; --warn: #8a5a00; --bad: #a12626; --warn-bg: #fff6df;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #15171a; --card: #1e2125; --ink: #e9e9e6; --muted: #a2a6ad;
+      --line: #33373d; --accent: #6db8e3; --accent-ink: #10202a;
+      --ok: #7fd09a; --warn: #f0c36a; --bad: #f08a8a; --warn-bg: #2c2718;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 720px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 1.7rem; margin: 0 0 4px; }
+  h2 { font-size: 1.1rem; margin: 0 0 8px; }
+  p { margin: 0 0 12px; }
+  .lead { color: var(--muted); margin-bottom: 24px; }
+  .card { background: var(--card); border: 1px solid var(--line);
+          border-radius: 10px; padding: 18px; margin-bottom: 16px; }
+  .muted { color: var(--muted); font-size: .92rem; }
+  .mono { font-family: ui-monospace, Consolas, monospace; font-size: .85rem;
+          word-break: break-all; }
+  .ok { color: var(--ok); } .bad { color: var(--bad); } .warn { color: var(--warn); }
+  .note { background: var(--warn-bg); border-left: 3px solid var(--warn);
+          padding: 8px 12px; margin: 8px 0; font-size: .92rem; border-radius: 4px; }
+  label.patch { display: block; border: 1px solid var(--line); border-radius: 8px;
+                padding: 12px; margin: 8px 0; cursor: pointer; }
+  label.patch input { margin-right: 8px; }
+  .tag { display: inline-block; font-size: .78rem; padding: 1px 8px;
+         border-radius: 999px; border: 1px solid currentColor; margin-left: 6px; }
+  button { font: inherit; padding: 10px 18px; border-radius: 8px; border: 0;
+           background: var(--accent); color: var(--accent-ink); cursor: pointer; }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  input[type=file] { font: inherit; max-width: 100%; }
+  a { color: var(--accent); }
+  #counter { font-variant-numeric: tabular-nums; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Volvo DIM patch tool</h1>
+  <p class="lead">Custom text and coolant temperature on the P1 / P3 instrument
+  cluster. Pick your own flash dump; the tool checks it and gives you the
+  patched file.</p>
+
+  <div class="card">
+    <h2>1. Choose your flash dump</h2>
+    <p class="muted">A full 256&nbsp;KB read of your own cluster. <strong>The file
+    stays on your computer</strong>: everything on this page runs in your
+    browser and nothing is uploaded.</p>
+    <input type="file" id="file" accept=".bin,application/octet-stream">
+    <p id="fileinfo" class="muted" style="margin-top:10px"></p>
+  </div>
+
+  <div class="card" id="step2" hidden>
+    <h2>2. Patch</h2>
+    <div id="verdict"></div>
+    <form id="choices"></form>
+    <label id="ackrow" hidden><input type="checkbox" id="ack">
+      I understand this build has not been confirmed on a car yet.</label>
+    <p style="margin-top:14px"><button id="go" disabled>Make patched file</button></p>
+  </div>
+
+  <div class="card" id="step3" hidden>
+    <h2>3. Download</h2>
+    <p id="done" class="ok"></p>
+    <p><a id="dl" download><button type="button">Download patched file</button></a></p>
+    <p class="muted">Keep your original dump. Flashing it back restores the
+    cluster. Only flash if you are able to recover the cluster should
+    something go wrong.</p>
+  </div>
+
+  <p class="muted" id="counterrow" hidden>Patched files made with this tool so far:
+    <strong id="counter"></strong></p>
+
+  <p class="muted">Source, patch details and how it works:
+    <a href="https://github.com/heapsofprojects/volvo-dim-patches">github.com/heapsofprojects/volvo-dim-patches</a>
+    &middot; <a href="https://www.youtube.com/@HeapsofProjects">YouTube</a><br>
+    Not affiliated with Volvo. Use on your own vehicle and at your own risk.</p>
+</main>
+
+<script src="assets/patcher.js"></script>
+<script>
+"use strict";
+// Optional usage counter. It only counts how many patched files were made;
+// it never receives the file, its checksum or anything about the car.
+// Leave "workspace" empty to switch the counter off.
+var COUNTER = { workspace: "", name: "patched-files" };
+
+var patches = [], current = null, blobUrl = null;
+var $ = function (id) { return document.getElementById(id); };
+
+function el(tag, cls, text) {
+  var e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+
+async function loadPatches() {
+  var names = await (await fetch("patches/index.json")).json();
+  patches = await Promise.all(names.map(async function (n) {
+    return (await fetch("patches/" + n)).json();
+  }));
+}
+
+function counterUrl(up) {
+  return "https://api.counterapi.dev/v2/" + encodeURIComponent(COUNTER.workspace) +
+         "/" + encodeURIComponent(COUNTER.name) + (up ? "/up" : "");
+}
+async function counter(up) {
+  if (!COUNTER.workspace) return;
+  try {
+    var j = await (await fetch(counterUrl(up))).json();
+    var d = j.data || j;
+    var n = d.up_count !== undefined ? d.up_count : (d.count !== undefined ? d.count : d.value);
+    if (typeof n === "number") { $("counter").textContent = n; $("counterrow").hidden = false; }
+  } catch (e) { /* the counter is optional; the tool works without it */ }
+}
+
+function reset() {
+  $("step2").hidden = true; $("step3").hidden = true;
+  $("verdict").textContent = ""; $("choices").textContent = "";
+  $("ackrow").hidden = true; $("ack").checked = false; $("go").disabled = true;
+  if (blobUrl) { URL.revokeObjectURL(blobUrl); blobUrl = null; }
+}
+
+function selectedPatch() {
+  var r = document.querySelector("input[name=patch]:checked");
+  return r ? patches.filter(function (p) { return p.id === r.value; })[0] : null;
+}
+
+function refreshGo() {
+  var p = selectedPatch();
+  var untested = p && p.status.indexOf("confirmed") !== 0;
+  $("ackrow").hidden = !untested;
+  $("go").disabled = !p || (untested && !$("ack").checked);
+}
+
+async function onFile(file) {
+  reset();
+  if (!file) { $("fileinfo").textContent = ""; return; }
+  var bytes = new Uint8Array(await file.arrayBuffer());
+  var res = await DimPatcher.identify(patches, bytes);
+  current = { name: file.name, bytes: bytes };
+  $("fileinfo").textContent = file.name + " – " + bytes.length + " bytes";
+  var v = $("verdict");
+  $("step2").hidden = false;
+
+  if (res.applicable.length) {
+    v.appendChild(el("p", "ok", "Recognised: software " + res.applicable[0].sw_pn +
+      " (" + res.applicable[0].cluster + ")."));
+    res.applicable.forEach(function (p, i) {
+      var lab = el("label", "patch");
+      var radio = el("input"); radio.type = "radio"; radio.name = "patch"; radio.value = p.id;
+      if (res.applicable.length === 1) radio.checked = true;
+      radio.addEventListener("change", refreshGo);
+      lab.appendChild(radio);
+      lab.appendChild(el("strong", "", p.summary));
+      var confirmed = p.status.indexOf("confirmed") === 0;
+      lab.appendChild(el("span", "tag " + (confirmed ? "ok" : "warn"), p.status));
+      lab.appendChild(el("div", "muted", p.id + " – changes " +
+        DimPatcher.bytesChanged(p) + " bytes in " + p.ops.length + " places"));
+      (p.notes || []).forEach(function (n) { lab.appendChild(el("div", "note", n)); });
+      $("choices").appendChild(lab);
+    });
+    refreshGo();
+    return;
+  }
+  if (res.alreadyPatched.length) {
+    v.appendChild(el("p", "warn", "This file is already patched (" +
+      res.alreadyPatched[0].id + "). Use your original stock dump."));
+    return;
+  }
+  if (bytes.length !== 262144) {
+    v.appendChild(el("p", "bad", "This is not a 256 KB flash dump (expected 262144 bytes)."));
+    return;
+  }
+  v.appendChild(el("p", "bad", "No patch for this software version yet."));
+  v.appendChild(el("p", "muted", "Patches only fit the exact firmware build they " +
+    "were written for, and this file matches none of them. Checksum of your file:"));
+  v.appendChild(el("p", "mono", res.sha256));
+  v.appendChild(el("p", "muted", "You can open an issue on GitHub with the software " +
+    "part number of your cluster. Please do not attach firmware files."));
+}
+
+async function onGo() {
+  var p = selectedPatch();
+  if (!p || !current) return;
+  $("go").disabled = true;
+  try {
+    var out = await DimPatcher.applyPatch(p, current.bytes);
+    blobUrl = URL.createObjectURL(new Blob([out], { type: "application/octet-stream" }));
+    var base = current.name.replace(/\.[^.]*$/, "");
+    $("dl").href = blobUrl;
+    $("dl").download = base + "_" + p.id + ".bin";
+    $("done").textContent = "Done. Checked: the result matches the expected patched image.";
+    $("step3").hidden = false;
+    counter(true);
+  } catch (e) {
+    $("verdict").appendChild(el("p", "bad", e.message));
+  }
+  refreshGo();
+}
+
+$("file").addEventListener("change", function (e) { onFile(e.target.files[0]); });
+$("ack").addEventListener("change", refreshGo);
+$("go").addEventListener("click", function (e) { e.preventDefault(); onGo(); });
+loadPatches().then(function () { counter(false); }).catch(function () {
+  $("fileinfo").textContent = "Could not load the patch list. Reload the page.";
+  $("fileinfo").className = "bad";
+});
+</script>
+</body>
+</html>

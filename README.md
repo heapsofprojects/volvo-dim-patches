@@ -26,6 +26,61 @@ stock image, with checksums), the logic behind them, and a tool to apply
 them to a dump you have read from your own cluster. It contains **no Volvo
 firmware** and no flashing tool.
 
+## Try it online
+
+**[heapsofprojects.github.io/volvo-dim-patches](https://heapsofprojects.github.io/volvo-dim-patches/)**
+
+Pick your flash dump, and the page tells you whether a patch exists for it
+and gives you the patched file. Everything happens in your browser. Your
+file is not uploaded anywhere.
+
+## How it works, in plain words
+
+1. **The cluster is a small computer.** Its program sits in a 256 KB memory
+   chip. Reading that chip gives you one file, the "flash dump".
+2. **Somewhere in that program the cluster decides which text to show** on
+   the trip-computer line. It is a few instructions that pick one of the
+   stored texts by its number.
+3. **The chip has unused space**, areas that were never written and read as
+   `FF`.
+4. **A small new routine goes into that unused space.** It says: "if this is
+   the line I care about, use my text; otherwise do exactly what the
+   original did."
+5. **A handful of original bytes are changed** so that the cluster calls the
+   new routine at that point and then carries on as before. Depending on
+   the cluster that is between 5 and 22 bytes in total.
+6. **The text has to come from somewhere.** The cluster already listens to
+   the car's CAN network, so a second small routine watches the incoming
+   messages. When it sees one addressed to it, it stores the text in the
+   cluster's memory. For coolant temperature no extra hardware is needed:
+   the value is already there, and the routine turns the number into
+   characters.
+
+Nothing else in the cluster is touched. Gauges, warnings and mileage work
+as before, and flashing the original dump back removes the patch.
+
+## How it was done
+
+- Read the flash and take the program apart with a disassembler to find
+  the place where the text is chosen.
+- When a text buffer could not be found in the program itself, add a
+  temporary read command, dump the running cluster's memory, and look for
+  the words that were on the display at that moment.
+- Write the new routines by hand in HCS12 machine code.
+- Run every routine in an emulator with every possible input before it
+  went near a real cluster, then test on a bench cluster, then in the car.
+
+## Where to look
+
+| If you want to see... | Look at |
+|---|---|
+| exactly which bytes change | [`patches/`](patches/), one JSON file per patch |
+| what the new routines do, instruction by instruction | [`listings/`](listings/) |
+| addresses, CAN frame formats and the hook points | [docs/how-it-works.md](docs/how-it-works.md) |
+| how to find the same places in another software version | [the last section of that document](docs/how-it-works.md#finding-these-places-on-another-software-version) |
+| the patching logic of the online tool | [`assets/patcher.js`](assets/patcher.js) |
+| the same thing as a command-line tool | [`apply_patch.py`](apply_patch.py) |
+
 ## Supported clusters
 
 | Patch id | Cluster | SW part no. | What it does | Status |
@@ -44,7 +99,7 @@ number. If your dump does not match, the patch is not for your cluster.
 Each `patches/*.json` file carries a `notes` list. Read it: two of the
 confirmed patches have known flaws that are documented there.
 
-## Applying a patch
+## Applying a patch offline
 
 You need a full 256 KB flash dump of your own cluster, and your own means of
 writing a 256 KB image back.
@@ -60,17 +115,6 @@ checks the result. It never modifies your dump.
 
 Keep your stock dump. Flashing it back restores the cluster.
 
-## How it works
-
-See [docs/how-it-works.md](docs/how-it-works.md). In short:
-
-- The cluster builds each text line in RAM and redraws it continuously, so
-  writing the text buffer from outside does not hold. Every patch therefore
-  hooks the cluster's own code at the point where it picks or draws the text.
-- New code goes into unused (erased) flash. A hook is a 2 to 10 byte change
-  that jumps to it and returns to the original code.
-- `listings/*.lst` is a disassembly of every byte each patch writes.
-
 ## Warnings
 
 - A wrong image can leave a cluster unable to boot. Only flash if you can
@@ -81,6 +125,12 @@ See [docs/how-it-works.md](docs/how-it-works.md). In short:
   untrusted devices to the car's CAN bus.
 - This project is not affiliated with or endorsed by Volvo. Use it on your
   own vehicle and at your own risk.
+
+## Contact
+
+Questions, results from your own cluster, or a software version that is not
+covered yet: open an issue here or write to heapsofprojects@gmail.com.
+Please do not send or attach firmware files.
 
 ## Licence
 
