@@ -13,7 +13,7 @@ So I worked out how the cluster draws its text and wrote small patches that
 make it show what I want. This repository is the result, published so that
 others can use it, check it and build on it.
 
-Videos of the project: [Heaps of Projects on YouTube](https://www.youtube.com/@HeapsofProjects)
+Follow the project: [YouTube](https://www.youtube.com/@HeapsofProjects) · [Instagram](https://www.instagram.com/heapsofprojects/)
 
 ## What it is
 
@@ -80,6 +80,7 @@ as before, and flashing the original dump back removes the patch.
 | how to find the same places in another software version | [the last section of that document](docs/how-it-works.md#finding-these-places-on-another-software-version) |
 | the patching logic of the online tool | [`assets/patcher.js`](assets/patcher.js) |
 | the same thing as a command-line tool | [`apply_patch.py`](apply_patch.py) |
+| how text is sent to a patched cluster | [`send_text.py`](send_text.py) |
 
 ## Supported clusters
 
@@ -114,6 +115,45 @@ location it is about to change, writes the patched image to a new file, and
 checks the result. It never modifies your dump.
 
 Keep your stock dump. Flashing it back restores the cluster.
+
+## Sending text to a patched cluster
+
+Once a text patch is in the cluster, it shows whatever text arrives on the
+car's MS-CAN bus (125 kbit/s, OBD pins 3 and 11) in the format below.
+[`send_text.py`](send_text.py) does this from a Windows PC with any J2534
+cable (DiCE, Mongoose and similar), using only the Python standard library:
+
+```bash
+python send_text.py --list
+python send_text.py xc70 "Hello from CAN"
+python send_text.py c30 "HELLO FROM CAN"
+python send_text.py xc70 "Hello" --dry-run
+```
+
+`--list` shows the cables Windows knows about, `--keep` re-sends twice a
+second until you stop it, and `--dry-run` prints the frames without
+sending, which is what you need if you use other hardware such as an ESP32
+or an Arduino with a CAN shield. Python and the cable's driver must have
+the same bitness (a 32-bit driver needs 32-bit Python).
+
+| Patch | CAN id | Data bytes | Frames for 32 characters |
+|---|---|---|---|
+| `xc70_31254762_text`, `xc70_31254762_coolant` | `0x720` (11-bit) | `80 hi lo b0 b1 b2 b3 b4`: store five bytes at RAM address `hi:lo`; slot 1 starts at `$3CFD` | 13 |
+| `c30_31270367_text`, `c30_31254781_text` | `0x000FFFFE` (29-bit) | `CA FE off c0 c1 c2 c3 00`: store four bytes at offset `off` (0 to 60) of the text buffer | 16 |
+
+Text is UTF-16, big-endian, 32 characters, padded with spaces. The C30
+sender upper-cases the text. Sending each frame twice makes the update
+reliable.
+
+The coolant patches for SW 31327396 need no sender: they read the
+temperature inside the cluster. With `xc70_31254762_coolant` slot 1 is
+rewritten with the temperature on every coolant frame, so text you send
+there does not stay; use `xc70_31254762_text` if you want your own text.
+
+The frame builders in `send_text.py` were checked against the tools used
+on the car and against an emulated patched cluster. The J2534 part follows
+those tools as well, but this script itself has not yet been run on a real
+cable. If you try it, please report how it went.
 
 ## Warning: this can brick your cluster
 

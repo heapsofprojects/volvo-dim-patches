@@ -35,7 +35,9 @@ frames replace the whole 32-character slot.
 
 Frames whose data starts `CA FE`: byte 2 = offset (0-63), bytes 3-6 = four
 bytes stored at `$3A50 + offset`. `$3A50` is a 64-byte text buffer that the
-patch substitutes for trip-computer slots 1 and 5.
+patch substitutes for trip-computer slots 1 and 5. The helper looks only at
+the `CA FE` marker, not at the id; the patch was tested with the 29-bit id
+`0x000FFFFE` on MS-CAN at 125 kbit/s, which is what `send_text.py` uses.
 
 ## Slot hook: 31254762, 31270367, 31254781
 
