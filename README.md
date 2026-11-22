@@ -1,5 +1,22 @@
 # Volvo DIM text patches
 
+Custom text on the Volvo P1 / P3 instrument cluster (DIM).
+
+## Why this exists
+
+I started this project because I found it frustrating that I could not
+display custom text in the P1 / P3 DIM. The display is right there in front
+of the driver, the car already knows things worth showing on it (coolant
+temperature, for one), and there was no way to put them there.
+
+So I worked out how the cluster draws its text and wrote small patches that
+make it show what I want. This repository is the result, published so that
+others can use it, check it and build on it.
+
+Videos of the project: [Heaps of Projects on YouTube](https://www.youtube.com/@HeapsofProjects)
+
+## What it is
+
 Small firmware patches for Volvo instrument clusters (DIM) that let the
 trip-computer text line show your own content: text sent over CAN, or the
 engine coolant temperature.
