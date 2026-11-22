@@ -119,8 +119,8 @@ Keep your stock dump. Flashing it back restores the cluster.
 
 Writing a modified image to an instrument cluster can leave it **unable to
 start**. A failed or interrupted write, a wrong file or a patch that does
-not suit your cluster can all do that, and a dead cluster can mean a car
-that will not run.
+not suit your cluster can all do that. Until it is recovered you would have
+no speedometer, gauges or warning messages.
 
 Only go ahead if you have a verified copy of your original dump and know
 how to write it back to a cluster that no longer responds.
